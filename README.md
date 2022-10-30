@@ -12,4 +12,4 @@ I highly recommend the use of a .env file for saving the following credentials
 - Ip of the lamp in your local network
 - Discord bot token
 
-###Enjoy and have fun
+### Enjoy and have fun
