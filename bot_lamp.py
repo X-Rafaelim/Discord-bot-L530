@@ -4,12 +4,11 @@ import os
 from dotenv import load_dotenv
 from PyP100 import PyL530
 
-load_dotenv('./lamp_bot/.env')
+load_dotenv()
 tapo_email = os.environ.get("TAPO_EMAIL")
 tapo_password = os.getenv("TAPO_PASSWORD")
 tapo_ip = os.getenv("LAMP_IP")
 discord_token = os.getenv("DISCORD_TOKEN")
-print(tapo_email)
 
 l530 = PyL530.L530(tapo_ip, tapo_email, tapo_password)  # Creating a L530 bulb object
 l530.handshake()  # Creates the cookies required for further methods
@@ -33,27 +32,24 @@ async def luz(ctx, color: float, brightness: float):
     color_undecimal = int(color)
     brightness_undecimal = int(brightness)
 
-    print(color_undecimal)
-    print(brightness_undecimal)
+    if color_undecimal > 360:
+        color_undecimal = 360
+    if brightness_undecimal > 100:
+        brightness_undecimal = 100
 
-    if color > 360:
-        color = 360
-    if brightness > 100:
-        brightness = 100
-
-    if brightness == False:
-        l530.setColor(color, 100)  # Sends the set colour request
+    if brightness_undecimal == False:
+        l530.setColor(color_undecimal, 100)  # Sends the set colour request
     else:
-        l530.setBrightness(brightness)  # Sends the set brightness request
-        l530.setColor(color, 100)  # Sends the set colour request
+        l530.setBrightness(brightness_undecimal)  # Sends the set brightness request
+        l530.setColor(color_undecimal, 100)  # Sends the set colour request
 
-    await ctx.send("Light changed")
+    await ctx.send("Luz Mudada")
 
 
 @bot.command()
 async def luzoff(ctx):
     l530.turnOff()
-    await ctx.send("Light off")
+    await ctx.send("Luz Desligada")
 
 
 bot.run(discord_token)
